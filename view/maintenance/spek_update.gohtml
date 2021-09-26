@@ -1,0 +1,111 @@
+{{define "maintenance-form-update"}}
+    {{template "top-wrapper"}}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3 class="card-title text-white">Spesifikasi Perangkat</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/maintenance/update" method="post">
+                        <input type="hidden" name="idMaintenance" value="{{.data.Id}}">
+                        <div class="form-group">
+                            <label for="" class="form-label">Motherboard</label>
+                            <input value="{{.data.Motherboard}}" type="text" name="motherboard" class="form-control" placeholder="Motherboard">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="" class="form-label">Vendor RAM</label>
+                                    <input value="{{.data.VendorRam}}" required type="text" name="vendor_ram"  class="form-control" placeholder="Vendor RAM">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="" class="form-label">Jumlah RAM</label>
+                                    <select name="jumlah_ram" class="form-control">
+                                        <option value="" selected disabled>Pilih Jumlah RAM</option>
+                                        <option value="2">2 GB</option>
+                                        <option value="4">4 GB</option>
+                                        <option value="6">6 GB</option>
+                                        <option value="8">8 GB</option>
+                                        <option value="lainnya">Lainnya</option>
+                                    </select>
+                                    <small class="text-danger">
+                                        Jumlah RAM Saat Ini Adalah <b>{{.data.JumlahRam}} GB</b>, Abaikan Jika Jumlah Ram Tidak Diganti
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="" class="form-label">Graphic Card</label>
+                                    <input value="{{.data.GraphicCard}}" required type="text" name="graphic_card" class="form-control" placeholder="Graphic Card">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="" class="form-label">NIC</label>
+                                    <input value="{{.data.NIC}}" required type="text" name="nic" class="form-control" placeholder="NIC">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="" class="form-label">Sistem Operasi</label>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="" class="form-label">Windows</label>
+                                            <input
+                                            {{if eq .data.SistemOperasi "windows"}}
+                                                checked
+                                            {{end}}
+                                            required type="radio" name="sistem_operasi" value="windows">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="" class="form-label">Linux</label>
+                                            <input
+                                            {{if eq .data.SistemOperasi "linux"}}
+                                                checked
+                                            {{end}}
+                                            required type="radio" name="sistem_operasi" value="linux">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="" class="form-label">MAC OS</label>
+                                            <input
+                                            {{if eq .data.SistemOperasi "windows"}}
+                                                mac
+                                            {{end}}
+                                            required type="radio" name="sistem_operasi" value="mac">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="" class="form-label">Arsitektur Sistem Operasi</label>
+                                <select name="arsitektur_os"  class="form-control">
+                                    <option value="" selected disabled>Piih Arsitektur Sistem Operasi</option>
+                                    <option value="32">32 BIT</option>
+                                    <option value="64">64 BIT</option>
+                                </select>
+                                <small class="text-danger">
+                                    Arsitektur Sistem Operasi Saat Ini <b>{{.data.ArchOS}} bit</b>, Abaikan Jika Arsitektur OS Tidak Diganti
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-sm">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{template "bottom-wrapper"}}
+{{end}}

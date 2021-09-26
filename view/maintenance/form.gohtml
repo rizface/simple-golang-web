@@ -1,0 +1,134 @@
+{{define "maintenance-form"}}
+    {{template "top-wrapper"}}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <div class="card-title text-white">Preventive Maintenance</div>
+                </div>
+                <div class="card-body">
+                    <form action="maintenance/save/" method="post">
+                        <div class="card">
+                            <div class="card-header bg-primary">
+                                <div class="card-title text-white">Spesifikasi Perangkat</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="" class="form-label">Motherboard</label>
+                                    <input type="text" name="motherboard" class="form-control" placeholder="Motherboard">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="" class="form-label">Vendor RAM</label>
+                                            <input required type="text" name="vendor_ram"  class="form-control" placeholder="Vendor RAM">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="" class="form-label">Jumlah RAM</label>
+                                            <select name="jumlah_ram" class="form-control">
+                                                <option value="" selected disabled>Pilih Jumlah RAM</option>
+                                                <option value="2">2 GB</option>
+                                                <option value="4">4 GB</option>
+                                                <option value="6">6 GB</option>
+                                                <option value="8">8 GB</option>
+                                                <option value="lainnya">Lainnya</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="" class="form-label">Graphic Card</label>
+                                            <input required type="text" name="graphic_card" class="form-control" placeholder="Graphic Card">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="" class="form-label">NIC</label>
+                                            <input required type="text" name="nic" class="form-control" placeholder="NIC">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="" class="form-label">Sistem Operasi</label>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="" class="form-label">Windows</label>
+                                                    <input required type="radio" name="sistem_operasi" value="windows">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="" class="form-label">Linux</label>
+                                                    <input required type="radio" name="sistem_operasi" value="linux">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="" class="form-label">MAC OS</label>
+                                                    <input required type="radio" name="sistem_operasi" value="mac">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="" class="form-label">Arsitektur Sistem Operasi</label>
+                                        <select name="arsitektur_os"  class="form-control">
+                                            <option value="" selected disabled>Piih Arsitektur Sistem Operasi</option>
+                                            <option value="32">32 BIT</option>
+                                            <option value="64">64 BIT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header bg-primary">
+                                <div class="card-title text-white">Detail Perbaikan</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="" class="form-label">Nama Petugas</label>
+                                            <input required type="text" name="nama_petugas"  class="form-control" placeholder="Nama Petugas">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="" class="form-label">Lama Pengerjaan</label>
+                                            <input required type="number" name="lama_pengerjaan"  class="form-control" placeholder="Masukan Estimasi Lama Pengerjaan">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="" class="form-label">Informasi Lainnya</label>
+                                            <textarea required name="informasi_lainnya" id="" cols="30" rows="10" class="form-control" placeholder="Masukan Informasi Lainnya, Isi 'Tidak Ada' Informasi Lainnya Tidak Tersedia"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="" class="form-label">Detail Pengerjaan</label>
+                                            <textarea required name="detail_pengerjaan" id="" cols="30" rows="10" class="form-control" placeholder="Masukan Detail Pengerjaan"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{template "bottom-wrapper"}}
+{{end}}

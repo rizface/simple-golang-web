@@ -1,0 +1,49 @@
+{{define "maintenance"}}
+    {{template "top-wrapper"}}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary">
+                        <h3 class="card-title text-white">Data Preventive Maintenance</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" style="text-transform: capitalize">
+                                <thead>
+                                    <tr>
+                                        <th>nama petugas</th>
+                                        <th>lama pengerjaan</th>
+                                        <th>tanggal masuk</th>
+                                        <th>aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{range $v := .data}}
+                                        <tr>
+                                            <td>{{$v.Detail.NamaPetugas}}</td>
+                                            <td>{{$v.Detail.LamaPengerjaan}} Hari</td>
+                                            <td>{{$v.Spek.TglMasuk}}</td>
+                                            <td>
+                                                <a onclick="return confirm('Apakah Andaa Yakin Ingin Menghapus Data Ini ?')"
+                                                   href="/maintenance/delete/{{$v.Detail.IdMaintenance}}"
+                                                   class="btn btn-danger btn-sm">
+                                                    Hapus
+                                                </a>
+                                                <a href="/maintenance/update?id_maintenance={{$v.Detail.IdMaintenance}}" class="btn btn-warning btn-sm text-white">
+                                                    Detail Spesifikasi
+                                                </a>
+                                                <a href="/maintenance/detail/update?id_maintenance={{$v.Detail.IdMaintenance}}" class="btn btn-success btn-sm text-white">
+                                                    Detail Maintenance
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {{end}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{template "bottom-wrapper"}}
+{{end}}
