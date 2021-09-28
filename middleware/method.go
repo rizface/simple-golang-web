@@ -12,7 +12,7 @@ func CheckError(next http.Handler) http.Handler {
 			msg := recover()
 			if msg != nil {
 				dialog.Alert(msg.(error).Error())
-				http.Redirect(rw, r, "/maintenance-form", http.StatusSeeOther)
+				http.Redirect(rw, r, r.Header.Get("Referer"), http.StatusSeeOther)
 			}
 		}()
 		next.ServeHTTP(rw, r)

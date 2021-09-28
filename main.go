@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"pbl-orkom/app"
 	"pbl-orkom/controller"
@@ -23,7 +24,11 @@ func main() {
 	serviceImpl := service.NewMaintenanceServiceImpl(db, validate, spekImpl, detailImpl)
 	controllerImpl := controller.NewMaintenanceController(serviceImpl)
 
+	// maintenance
 	mux.Use(middleware.CheckError)
+	mux.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
+		fmt.Fprint(writer,"Ini Akan Jadi Halaman Login")
+	})
 	mux.HandleFunc(app.GET_MAINTENANCE, controllerImpl.GetAll).Methods(http.MethodGet)
 	mux.HandleFunc(app.GET_MAINTENANCE_FORM, controllerImpl.Form).Methods(http.MethodGet)
 	mux.HandleFunc(app.SAVE_MAINTENANCE, controllerImpl.Save).Methods(http.MethodPost)
@@ -31,13 +36,23 @@ func main() {
 	mux.HandleFunc(app.UPDATE_MAINTENANCE, controllerImpl.Update).Methods(http.MethodPost)
 	mux.HandleFunc(app.DELETE_MAINTENANCE, controllerImpl.Delete).Methods(http.MethodGet)
 	mux.HandleFunc(app.UPDATE_DETAIL_MAINTENANCE, controllerImpl.FormUpdateDetail).Methods(http.MethodGet)
-	mux.HandleFunc(app.UPDATE_DETAIL_MAINTENANCE,controllerImpl.UpdateDetail).Methods(http.MethodPost)
-	mux.HandleFunc(app.EXPORT_MAINTENANCE,controllerImpl.Export)
+	mux.HandleFunc(app.UPDATE_DETAIL_MAINTENANCE, controllerImpl.UpdateDetail).Methods(http.MethodPost)
+	mux.HandleFunc(app.EXPORT_MAINTENANCE, controllerImpl.Export)
 
+
+	// troubleshooting
+	troubleRepo := repository.NewTroubleshootingRepo()
+	componentRepo := repository.NewComponentRepoImpl()
+	troubleService := service.NewTroubleshootingImpl(db,validate,troubleRepo,componentRepo)
+	troubleController := controller.NewTroubleshootingImpl(troubleService)
+
+	mux.HandleFunc(app.GET_TROUBLESHOOTING, troubleController.Get).Methods(http.MethodGet)
+	mux.HandleFunc(app.SAVE_TROUBLESHOOTING_FORM, troubleController.FormSave).Methods(http.MethodGet)
+	mux.HandleFunc(app.SAVE_TROUBLESHOOTING,troubleController.Save).Methods(http.MethodPost)
 
 	helper.StaticFile(mux)
 	server := http.Server{
-		Addr:    app.APP_HOST,
+		Addr:    ":8080",
 		Handler: mux,
 	}
 	err := server.ListenAndServe()
@@ -45,4 +60,3 @@ func main() {
 		panic(err)
 	}
 }
-

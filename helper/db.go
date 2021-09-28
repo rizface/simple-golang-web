@@ -2,13 +2,14 @@ package helper
 
 import (
 	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
 	"pbl-orkom/app"
 	"time"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func Connection() *sql.DB {
-	db, err := sql.Open(app.DATABASE_DRIVER, "root:root@tcp(localhost:3306)/pbl_orkom?parseTime=true")
+	db, err := sql.Open(app.DATABASE_DRIVER, "root:root@tcp(:3306)/pbl_orkom?parseTime=true")
 	if err != nil {
 		panic(err)
 	}

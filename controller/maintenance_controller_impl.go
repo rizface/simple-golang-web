@@ -74,7 +74,8 @@ func (controller maintenanceControllerImpl) Delete(w http.ResponseWriter, r *htt
 }
 
 func (controller maintenanceControllerImpl) FormUpdate(w http.ResponseWriter, r *http.Request) {
-	idMaintenance,_ := strconv.Atoi(r.URL.Query().Get("id_maintenance"))
+	params := mux.Vars(r)
+	idMaintenance,_ := strconv.Atoi(params["idMaintenance"])
 	data := controller.service.FormUpdate(r.Context(),idMaintenance)
 	helper.ViewParser(w,"maintenance-form-update",map[string]interface{}{
 		"data":data,
@@ -103,7 +104,8 @@ func (controller maintenanceControllerImpl) Update(w http.ResponseWriter, r *htt
 }
 
 func (controller maintenanceControllerImpl) FormUpdateDetail(w http.ResponseWriter, r *http.Request) {
-	idMaintenance,_ := strconv.Atoi(r.URL.Query().Get("id_maintenance"))
+	params := mux.Vars(r)
+	idMaintenance,_ := strconv.Atoi(params["idMaintenance"])
 	data := controller.service.FormUpdateDetail(r.Context(),idMaintenance)
 	helper.ViewParser(w,"detail-maintenance-form",map[string]interface{} {
 		"data":data,
@@ -111,7 +113,6 @@ func (controller maintenanceControllerImpl) FormUpdateDetail(w http.ResponseWrit
 }
 
 func (controller maintenanceControllerImpl) UpdateDetail(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("bisa")
 	idMaintenance,_ := strconv.Atoi(r.PostFormValue("id"))
 	durasi, _ := strconv.Atoi(r.PostFormValue("lama_pengerjaan"))
 	detail := web.DetailMaintenance{

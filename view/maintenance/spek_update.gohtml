@@ -7,7 +7,7 @@
                     <h3 class="card-title text-white">Spesifikasi Perangkat</h3>
                 </div>
                 <div class="card-body">
-                    <form action="/maintenance/update" method="post">
+                    <form action="/maintenance/update/{{.data.Id}}/" method="post">
                         <input type="hidden" name="idMaintenance" value="{{.data.Id}}">
                         <div class="form-group">
                             <label for="" class="form-label">Motherboard</label>
