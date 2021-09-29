@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/gorilla/mux"
 	"net/http"
 	"pbl-orkom/helper"
 	"pbl-orkom/model/web"
@@ -18,7 +19,10 @@ func NewTroubleshootingImpl(service service.TroubleshootingService) Troubleshoot
 }
 
 func (t troubleshootingControllerImpl) Get(w http.ResponseWriter, r *http.Request) {
-	panic("implement me")
+	data := t.service.Get(r.Context())
+	helper.ViewParser(w,"troubleshooting",map[string]interface{} {
+		"data":data,
+	})
 }
 
 func (t troubleshootingControllerImpl) GetById(w http.ResponseWriter, r *http.Request) {
@@ -65,6 +69,15 @@ func (t troubleshootingControllerImpl) Update(w http.ResponseWriter, r *http.Req
 }
 
 func (t troubleshootingControllerImpl) Delete(w http.ResponseWriter, r *http.Request) {
-	panic("implement me")
+	params := mux.Vars(r)
+	idTrouble,err := strconv.Atoi(params["idTrouble"])
+	helper.PanicIfError(err)
+	success := t.service.Delete(r.Context(),idTrouble)
+	if success {
+		dialog.Alert("Data Troubleshooting Berhasil Dihapus")
+	} else {
+		dialog.Alert("Data Troubleshooting Gagal Dihapus")
+	}
+	http.Redirect(w,r,r.Header.Get("Referer"),http.StatusSeeOther)
 }
 

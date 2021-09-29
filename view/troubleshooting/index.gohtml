@@ -1,0 +1,42 @@
+{{define "troubleshooting"}}
+    {{template "top-wrapper"}}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3 class="card-title text-white">Data Troubleshooting</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" style="text-transform: capitalize">
+                            <thead>
+                            <tr>
+                                <th>nama customer</th>
+                                <th>biaya perbaikan</th>
+                                <th>tanggal masuk</th>
+                                <th>aksi</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{range $v := .data}}
+                                <tr>
+                                    <td>{{$v.NamaCustomer}}</td>
+                                    <td>Rp.{{$v.Biaya}}</td>
+                                    <td>{{$v.TglMasuk}}</td>
+                                    <td>
+                                        <a href="" class="text-white btn btn-warning btn-sm">Update</a>
+                                        <a onclick="return confirm('Yakin Akan Menghapus Data Ini ?')"
+                                           href="/troubleshooting/delete/{{$v.Id}}"
+                                           class="btn btn-danger btn-sm">Hapus</a>
+                                    </td>
+                                </tr>
+                            {{end}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{template "bottom-wrapper"}}
+{{end}}

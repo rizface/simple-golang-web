@@ -23,8 +23,12 @@ func NewTroubleshootingImpl(db *sql.DB,validate *validator.Validate, repo reposi
 	return troubleshootingServiceImpl{db:db,validate: validate,repo: repo, componentRepo: componentRepo}
 }
 
-func (t troubleshootingServiceImpl) Get(ctx context.Context) {
-	panic("implement me")
+func (t troubleshootingServiceImpl) Get(ctx context.Context)[]domain.Troubleshooting {
+	tx,err := t.db.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(tx)
+	result := t.repo.Get(ctx,tx)
+	return result;
 }
 
 func (t troubleshootingServiceImpl) GetById(ctx context.Context, idTrouble int) {
@@ -62,6 +66,13 @@ func (t troubleshootingServiceImpl) Update(ctx context.Context, idTrouble int, r
 }
 
 func (t troubleshootingServiceImpl) Delete(ctx context.Context, idTrouble int) bool {
-	panic("implement me")
+	tx,err := t.db.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(tx)
+	find := t.repo.GetById(ctx,idTrouble,tx)
+	if find.Id > 0 {
+		return t.repo.Delete(ctx,idTrouble,tx)
+	}
+	return false
 }
 

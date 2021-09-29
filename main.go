@@ -49,14 +49,10 @@ func main() {
 	mux.HandleFunc(app.GET_TROUBLESHOOTING, troubleController.Get).Methods(http.MethodGet)
 	mux.HandleFunc(app.SAVE_TROUBLESHOOTING_FORM, troubleController.FormSave).Methods(http.MethodGet)
 	mux.HandleFunc(app.SAVE_TROUBLESHOOTING,troubleController.Save).Methods(http.MethodPost)
+	mux.HandleFunc(app.DELETE_TROUBLESHOOTING, troubleController.Delete).Methods(http.MethodGet)
 
 	helper.StaticFile(mux)
-	server := http.Server{
-		Addr:    ":8080",
-		Handler: mux,
-	}
-	err := server.ListenAndServe()
-	if err != nil {
-		panic(err)
-	}
+	mux.NotFoundHandler = helper.NotFoundHandler
+	mux.MethodNotAllowedHandler = helper.MethodNotAllowedHandler
+	helper.StartServer(mux)
 }
