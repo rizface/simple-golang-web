@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/gorilla/mux"
 	"net/http"
+	"pbl-orkom/app"
 	"pbl-orkom/helper"
 	"pbl-orkom/model/web"
 	"pbl-orkom/service"
@@ -61,11 +62,40 @@ func (t troubleshootingControllerImpl) Save(w http.ResponseWriter, r *http.Reque
 }
 
 func (t troubleshootingControllerImpl) UpdateForm(w http.ResponseWriter, r *http.Request) {
-	panic("implement me")
+	params := mux.Vars(r)
+	idTrouble,err := strconv.Atoi(params["idTrouble"])
+	helper.PanicIfError(err)
+	trouble,component := t.service.UpdateFrom(r.Context(),idTrouble)
+	helper.ViewParser(w,"troubleshooting-update-form", map[string]interface{} {
+		"trouble":trouble,
+		"component":component,
+	})
 }
 
 func (t troubleshootingControllerImpl) Update(w http.ResponseWriter, r *http.Request) {
-	panic("implement me")
+	err := r.ParseForm()
+	helper.PanicIfError(err)
+	params := mux.Vars(r)
+	idTrouble,err := strconv.Atoi(params["idTrouble"])
+	helper.PanicIfError(err)
+	durasi,_ := strconv.Atoi(r.PostFormValue("lama_pengerjaan"))
+	biaya,_ := strconv.Atoi(r.PostFormValue("biaya"))
+	trouble := web.TroubleshootRequest{
+		NamaCustomer: r.PostFormValue("nama_customer"),
+		LamaPengerjaan: durasi,
+		Biaya: biaya,
+		Permasalahan: r.PostFormValue("permasalahan"),
+		InformasiLainnya: r.PostFormValue("informasi_lainnya"),
+		DetailPengerjaan: r.PostFormValue("detail_pengerjaan"),
+		ComponentId: r.PostForm["components"],
+	}
+	success := t.service.Update(r.Context(), idTrouble,trouble)
+	if success {
+		dialog.Alert("Data Troubleshooting Berhasil Diupdate")
+	} else {
+		dialog.Alert("Data Troubleshooting Gagal Diupdate")
+	}
+	http.Redirect(w,r, app.GET_TROUBLESHOOTING,http.StatusSeeOther)
 }
 
 func (t troubleshootingControllerImpl) Delete(w http.ResponseWriter, r *http.Request) {

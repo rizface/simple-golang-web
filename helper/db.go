@@ -2,6 +2,7 @@ package helper
 
 import (
 	"database/sql"
+	"os"
 	"pbl-orkom/app"
 	"time"
 
@@ -9,7 +10,8 @@ import (
 )
 
 func Connection() *sql.DB {
-	db, err := sql.Open(app.DATABASE_DRIVER, "root:root@tcp(:3306)/pbl_orkom?parseTime=true")
+	dsn := "root:root@tcp("+os.Getenv("MYSQL_HOST")+":3306)/pbl_orkom?parseTime=true"
+	db, err := sql.Open(app.DATABASE_DRIVER,dsn)
 	if err != nil {
 		panic(err)
 	}

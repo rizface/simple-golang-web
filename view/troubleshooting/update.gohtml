@@ -1,4 +1,4 @@
-{{define "troubleshooting-save-form"}}
+{{define "troubleshooting-update-form"}}
     {{template "top-wrapper"}}
     <div class="row">
         <div class="col-md-12">
@@ -7,18 +7,18 @@
                     <div class="card-title text-white">Troubleshooting</div>
                 </div>
                 <div class="card-body">
-                    <form action="/troubleshooting/save" method="post">
+                    <form action="/troubleshooting/update/{{.trouble.Id}}" method="post">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="" class="form-label">Nama Customer</label>
-                                    <input type="text" name="nama_customer"  class="form-control">
+                                    <input value="{{.trouble.NamaCustomer}}" type="text" name="nama_customer"  class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Lama Pengerjaan</label>
-                                    <input type="number" name="lama_pengerjaan" class="form-control">
+                                    <input value="{{.trouble.LamaPengerjaan}}" type="number" name="lama_pengerjaan" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -26,7 +26,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="" class="form-label">Biaya</label>
-                                    <input type="number" name="biaya" class="form-control">
+                                    <input value="{{.trouble.Biaya}}" type="number" name="biaya" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -34,7 +34,11 @@
                                     <label for="" class="form-label">Ganti Component</label>
                                     <select class="js-example-basic-multiple form-control" name="components" multiple="multiple">
                                         {{range $v := .component}}
-                                            <option value="{{$v.Id.Int64}}">{{$v.Component}}</option>
+                                            {{if eq $v.Include.Valid false}}
+                                                <option value="{{$v.Id.Int64}}">{{$v.Component}}</option>
+                                            {{else}}
+                                                <option selected value="{{$v.Id.Int64}}">{{$v.Component}}</option>
+                                            {{end}}
                                         {{end}}
                                     </select>
                                 </div>
@@ -44,13 +48,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="" class="form-label">Informasi Lainnya</label>
-                                    <textarea name="informasi_lainnya" cols="30" rows="10" class="form-control"></textarea>
+                                    <textarea name="informasi_lainnya" cols="30" rows="10" class="form-control">{{.trouble.InformasiLainnya}}</textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="" class="form-label">Detail Pengerjaan</label>
-                                    <textarea placeholder="Kosongkan Jika Belum Mulai Mengerjakan" name="detail_pengerjaan" cols="30" rows="10" class="form-control"></textarea>
+                                    <textarea placeholder="Kosongkan Jika Belum Mulai Mengerjakan" name="detail_pengerjaan" cols="30" rows="10" class="form-control">{{.trouble.DetailPengerjaan}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -58,14 +62,14 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="" class="form-label">Permasalahan</label>
-                                    <textarea name="permasalahan" placeholder="Masukan Permasalahan Pada Perangkat" cols="30" rows="10" class="form-control"></textarea>
+                                    <textarea name="permasalahan" placeholder="Masukan Permasalahan Pada Perangkat" cols="30" rows="10" class="form-control">{{.trouble.Permasalahan}}</textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+                                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
                                 </div>
                             </div>
                         </div>

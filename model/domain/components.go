@@ -1,6 +1,9 @@
 package domain
 
+import "database/sql"
+
 type Component struct {
-	Id int
+	Id sql.NullInt64
 	Component string
+	Include sql.NullInt64
 }

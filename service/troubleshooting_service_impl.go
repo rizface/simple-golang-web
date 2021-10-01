@@ -9,6 +9,7 @@ import (
 	"pbl-orkom/model/web"
 	"pbl-orkom/repository"
 	"strconv"
+	"sync"
 )
 
 type troubleshootingServiceImpl struct {
@@ -43,26 +44,65 @@ func (t troubleshootingServiceImpl) SaveForm(ctx context.Context)  []domain.Comp
 	return data
 }
 
+func saveComponent(t troubleshootingServiceImpl, request web.TroubleshootRequest, ctx context.Context, idTrouble int, tx *sql.Tx, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	componentWG := sync.WaitGroup{}
+	componentWG.Add(len(request.ComponentId))
+	for _, v := range request.ComponentId {
+		componentId,err := strconv.Atoi(v)
+		helper.PanicIfError(err)
+		go t.componentRepo.Save(ctx,tx,idTrouble,componentId, &componentWG)
+	}
+	componentWG.Wait()
+}
+
 func (t troubleshootingServiceImpl) Save(ctx context.Context, request web.TroubleshootRequest) bool {
+	wg := sync.WaitGroup{}
+
 	err := t.validate.Struct(request)
 	helper.ValidationHandler(err)
-	var componentId []int
+
 	tx,err := t.db.Begin()
 	helper.PanicIfError(err)
+
 	defer helper.CommitOrRollback(tx)
 	id := t.repo.Save(ctx,request,tx)
 	if len(request.ComponentId)  == 0 {
 		return true
 	}
-	for _, v := range request.ComponentId {
-		cId, _ := strconv.Atoi(v)
-		componentId = append(componentId, cId)
-	}
-	return t.componentRepo.Save(ctx,tx,int(id),componentId)
+	wg.Add(1)
+		go saveComponent(t,request,ctx,int(id),tx,&wg)
+	wg.Wait()
+	return true
+}
+
+func (t troubleshootingServiceImpl) UpdateFrom(ctx context.Context, idTrouble int) (domain.Troubleshooting, []domain.Component) {
+	tx, err := t.db.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(tx)
+	trouble := t.repo.GetById(ctx,idTrouble,tx)
+	component := t.componentRepo.GetByIdTrouble(ctx,tx,idTrouble)
+	return trouble,component
 }
 
 func (t troubleshootingServiceImpl) Update(ctx context.Context, idTrouble int, request web.TroubleshootRequest) bool {
-	panic("implement me")
+	wg := sync.WaitGroup{}
+
+	err := t.validate.Struct(request)
+	helper.ValidationHandler(err)
+
+	tx,err := t.db.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(tx)
+	trouble := t.repo.GetById(ctx, idTrouble, tx)
+
+	t.componentRepo.DeleteByIdTrouble(ctx,tx,trouble.Id,nil)
+	wg.Add(2)
+		go t.repo.Update(ctx,trouble.Id,request,tx,&wg)
+		go saveComponent(t,request,ctx,trouble.Id,tx,&wg)
+	wg.Wait()
+	return true
 }
 
 func (t troubleshootingServiceImpl) Delete(ctx context.Context, idTrouble int) bool {

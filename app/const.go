@@ -17,8 +17,7 @@ const (
 	SAVE_TROUBLESHOOTING_FORM  = "/troubleshooting/save"
 	SAVE_TROUBLESHOOTING = "/troubleshooting/save"
 	DELETE_TROUBLESHOOTING = "/troubleshooting/delete/{idTrouble}"
-	UPDATE_TROUBLESHOOTING_FORM = "/troubleshooting/update"
-	UPDATE_TROUBLESHOOTING = "/troubleshooting/update"
+	UPDATE_TROUBLESHOOTING = "/troubleshooting/update/{idTrouble}"
 	EXPORT_TROUBLESHOOTING = "/troubleshooting/export"
 
 )

@@ -12,5 +12,6 @@ type TroubleshootingService interface {
 	SaveForm(ctx context.Context) []domain.Component
 	Save(ctx context.Context, request web.TroubleshootRequest) bool
 	Update(ctx context.Context, idTrouble int, request web.TroubleshootRequest) bool
+	UpdateFrom(ctx context.Context, idTrouble int) (domain.Troubleshooting,[]domain.Component)
 	Delete(ctx context.Context, idTrouble int) bool
 }
