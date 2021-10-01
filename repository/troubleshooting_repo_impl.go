@@ -75,3 +75,19 @@ func (t troubleshootingRepositoryImpl) Delete(ctx context.Context, idTrouble int
 	helper.PanicIfError(err)
 	return affected > 0
 }
+
+func (t troubleshootingRepositoryImpl) Export(ctx context.Context, tx *sql.Tx) []domain.Export {
+	sql :=  "SELECT nama_customer, biaya, DATE_FORMAT(troubleshooting.created_at, '%w %M %Y'),(SELECT GROUP_CONCAT(component SEPARATOR \", \") FROM change_component INNER JOIN components ON components.id = change_component.id_component WHERE id_troubleshooting = troubleshooting.id) FROM troubleshooting\n"
+	rows,err := tx.QueryContext(ctx,sql)
+	helper.PanicIfError(err)
+	defer rows.Close()
+	data := []domain.Export{}
+	for rows.Next() {
+		each := domain.Export{}
+		err := rows.Scan(&each.NamaCustomer,&each.Biaya,&each.TglMasuk,&each.ChangeComponent)
+		helper.PanicIfError(err)
+		data = append(data, each)
+	}
+	return data
+}
+

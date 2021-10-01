@@ -9,5 +9,6 @@ type TroubleshootingController interface {
 	Save(w http.ResponseWriter, r *http.Request)
 	UpdateForm(w http.ResponseWriter, r *http.Request)
 	Update(w http.ResponseWriter, r *http.Request)
-	Delete(w http. ResponseWriter, r *http.Request)
+	Delete(w http.ResponseWriter, r *http.Request)
+	Export(w http.ResponseWriter, r *http.Request)
 }

@@ -3,7 +3,10 @@ package service
 import (
 	"context"
 	"database/sql"
+	"encoding/csv"
+	"fmt"
 	"github.com/go-playground/validator/v10"
+	"os"
 	"pbl-orkom/helper"
 	"pbl-orkom/model/domain"
 	"pbl-orkom/model/web"
@@ -115,4 +118,38 @@ func (t troubleshootingServiceImpl) Delete(ctx context.Context, idTrouble int) b
 	}
 	return false
 }
+
+func (t troubleshootingServiceImpl) createCSV(data []domain.Export) string{
+	csvData := [][]string{
+		{"Nama Customer", "Biaya", "Tanggal Masuk", "Pergantian Komponen"},
+	}
+	for _, v := range data {
+		biaya := strconv.Itoa(v.Biaya)
+		each := []string{
+			v.NamaCustomer,biaya,v.TglMasuk,v.ChangeComponent.String,
+		}
+		csvData = append(csvData,each)
+	}
+	fmt.Println(csvData)
+	csvFile,err := os.Create("troubleshooting.csv")
+	helper.PanicIfError(err)
+	csvWriter := csv.NewWriter(csvFile)
+	defer csvFile.Close()
+	defer csvWriter.Flush()
+	for _, v := range csvData {
+		err := csvWriter.Write(v)
+		helper.PanicIfError(err)
+	}
+	return csvFile.Name()
+}
+
+func (t troubleshootingServiceImpl) Export(ctx context.Context) string {
+	tx,err := t.db.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(tx)
+	data := t.repo.Export(ctx,tx)
+	fileName := t.createCSV(data)
+	return fileName
+}
+
 

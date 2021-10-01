@@ -13,4 +13,5 @@ type TroubleshootingRepository interface {
 	Save(ctx context.Context,request web.TroubleshootRequest, tx *sql.Tx) int64
 	Update(ctx context.Context, idTrouble int, request web.TroubleshootRequest, tx *sql.Tx, wg interface{}) bool
 	Delete(ctx context.Context, idTrouble int, tx *sql.Tx) bool
+	Export(ctx context.Context, tx *sql.Tx) []domain.Export
 }

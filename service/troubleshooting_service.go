@@ -14,4 +14,5 @@ type TroubleshootingService interface {
 	Update(ctx context.Context, idTrouble int, request web.TroubleshootRequest) bool
 	UpdateFrom(ctx context.Context, idTrouble int) (domain.Troubleshooting,[]domain.Component)
 	Delete(ctx context.Context, idTrouble int) bool
+	Export(ctx context.Context) string
 }

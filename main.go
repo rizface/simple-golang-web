@@ -52,6 +52,7 @@ func main() {
 	mux.HandleFunc(app.DELETE_TROUBLESHOOTING, troubleController.Delete).Methods(http.MethodGet)
 	mux.HandleFunc(app.UPDATE_TROUBLESHOOTING,troubleController.UpdateForm).Methods(http.MethodGet)
 	mux.HandleFunc(app.UPDATE_TROUBLESHOOTING, troubleController.Update).Methods(http.MethodPost)
+	mux.HandleFunc(app.EXPORT_TROUBLESHOOTING, troubleController.Export)
 
 	helper.StaticFile(mux)
 	mux.NotFoundHandler = helper.NotFoundHandler

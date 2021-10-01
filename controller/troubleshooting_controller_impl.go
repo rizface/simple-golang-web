@@ -3,12 +3,14 @@ package controller
 import (
 	"github.com/gorilla/mux"
 	"net/http"
+	"os"
 	"pbl-orkom/app"
 	"pbl-orkom/helper"
 	"pbl-orkom/model/web"
 	"pbl-orkom/service"
 	"strconv"
 	"tawesoft.co.uk/go/dialog"
+	"time"
 )
 
 type troubleshootingControllerImpl struct {
@@ -111,3 +113,10 @@ func (t troubleshootingControllerImpl) Delete(w http.ResponseWriter, r *http.Req
 	http.Redirect(w,r,r.Header.Get("Referer"),http.StatusSeeOther)
 }
 
+func (t troubleshootingControllerImpl) Export(w http.ResponseWriter, r *http.Request)  {
+	data := t.service.Export(r.Context())
+	w.Header().Add("Content-Disposition", "attachment; filename=\""+data+"\"")
+	http.ServeFile(w,r,data)
+	time.Sleep(3 * time.Second)
+	os.Remove(data)
+}
