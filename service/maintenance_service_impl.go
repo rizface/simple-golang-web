@@ -3,16 +3,14 @@ package service
 import (
 	"context"
 	"database/sql"
-	"fmt"
-	"github.com/xuri/excelize/v2"
+	"encoding/csv"
+	"github.com/go-playground/validator/v10"
+	"os"
 	"pbl-orkom/helper"
 	"pbl-orkom/model/domain"
 	"pbl-orkom/model/web"
 	"pbl-orkom/repository"
 	"strconv"
-	"time"
-
-	"github.com/go-playground/validator/v10"
 )
 
 type maintenanceServiceImpl struct {
@@ -98,45 +96,30 @@ func (service maintenanceServiceImpl) UpdateDetail(ctx context.Context, idMainte
 	return result
 }
 
-func (service maintenanceServiceImpl) createExcel(maintenances []domain.DetailJoinMaintenance) string {
-	fileName:= strconv.Itoa(int(time.Now().Unix()))
-	xlsx := excelize.NewFile()
-	xlsx.NewSheet("Preventive Maintenance")
-	xlsx.SetColWidth("Preventive Maintenance", "A","K", 20)
-	xlsx.AutoFilter("Preventive Maintenance","A1","K1","")
-	xlsx.SetCellValue("Preventive Maintenance", "A1", "No")
-	xlsx.SetCellValue("Preventive Maintenance", "B1", "Petugas")
-	xlsx.SetCellValue("Preventive Maintenance", "C1", "Lama Pengerjaan")
-	xlsx.SetCellValue("Preventive Maintenance", "D1", "Motherboard")
-	xlsx.SetCellValue("Preventive Maintenance", "E1", "Vendor RAM")
-	xlsx.SetCellValue("Preventive Maintenance", "F1", "Jumlah RAM")
-	xlsx.SetCellValue("Preventive Maintenance", "G1", "Graphic Card")
-	xlsx.SetCellValue("Preventive Maintenance", "H1", "NIC")
-	xlsx.SetCellValue("Preventive Maintenance", "I1", "Arsitektur OS")
-	xlsx.SetCellValue("Preventive Maintenance", "J1", "Detail Pengerjaan")
-	xlsx.SetCellValue("Preventive Maintenance", "K1", "Tanggal Masuk")
 
-	id := 1
-	row := 2
-
-	for _, v := range maintenances {
-		xlsx.SetCellValue("Preventive Maintenance",  fmt.Sprintf("A%d",row), id)
-		xlsx.SetCellValue("Preventive Maintenance", fmt.Sprintf("B%d",row), v.Detail.NamaPetugas)
-		xlsx.SetCellValue("Preventive Maintenance", fmt.Sprintf("C%d",row), strconv.Itoa(v.Detail.LamaPengerjaan) + " Hari")
-		xlsx.SetCellValue("Preventive Maintenance", fmt.Sprintf("D%d",row), v.Spek.Motherboard)
-		xlsx.SetCellValue("Preventive Maintenance", fmt.Sprintf("E%d",row), v.Spek.VendorRam)
-		xlsx.SetCellValue("Preventive Maintenance", fmt.Sprintf("F%d",row), v.Spek.JumlahRam)
-		xlsx.SetCellValue("Preventive Maintenance", fmt.Sprintf("G%d",row), v.Spek.GraphicCard)
-		xlsx.SetCellValue("Preventive Maintenance", fmt.Sprintf("H%d",row), v.Spek.NIC)
-		xlsx.SetCellValue("Preventive Maintenance", fmt.Sprintf("I%d",row), v.Spek.ArchOS)
-		xlsx.SetCellValue("Preventive Maintenance", fmt.Sprintf("J%d",row), v.Detail.DetailPengerjaan)
-		xlsx.SetCellValue("Preventive Maintenance", fmt.Sprintf("K%d",row), v.Spek.TglMasuk)
-		id += 1
-		row += 1
+func (service maintenanceServiceImpl) createCSV(maintenances []domain.DetailJoinMaintenance) string {
+	data := [][]string{
+		{"Petugas", "Lama Pengerjaan", "Motherboard", "Vendor RAM", "Jumlah RAM", "Graphic Card", "NIC","Sistem Opeasi","Arsitektur OS", "Detail Pengerjaan", "Tanggal Masuk"},
 	}
-	err := xlsx.SaveAs(fileName+".xlsx")
+	for _, v := range maintenances {
+		lamaPengerjaan := strconv.Itoa(v.Detail.LamaPengerjaan)
+		each := []string{
+			v.Detail.NamaPetugas,lamaPengerjaan,v.Spek.Motherboard,v.Spek.VendorRam,v.Spek.JumlahRam,
+			v.Spek.GraphicCard,v.Spek.NIC,v.Spek.SistemOperasi,v.Spek.ArchOS, v.Detail.DetailPengerjaan,v.Spek.TglMasuk,
+		}
+		data = append(data,each)
+	}
+
+	csvFile,err := os.Create("maintenance.csv")
 	helper.PanicIfError(err)
-	return fileName+".xlsx"
+	defer csvFile.Close()
+	csvWriter := csv.NewWriter(csvFile)
+	defer csvWriter.Flush()
+	for _, v := range data {
+		err = csvWriter.Write(v)
+		helper.PanicIfError(err)
+	}
+	return csvFile.Name()
 }
 
 func (service maintenanceServiceImpl) Export(ctx context.Context) string {
@@ -144,6 +127,6 @@ func (service maintenanceServiceImpl) Export(ctx context.Context) string {
 	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(tx)
 	data := service.detail.Export(ctx,tx)
-	fileName := service.createExcel(data)
+	fileName := service.createCSV(data)
 	return fileName
 }

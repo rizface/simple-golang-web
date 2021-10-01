@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 	"os"
@@ -132,7 +131,6 @@ func (controller maintenanceControllerImpl) UpdateDetail(w http.ResponseWriter, 
 
 func (controller maintenanceControllerImpl) Export(w http.ResponseWriter, r *http.Request)  {
  	data := controller.service.Export(r.Context())
- 	fmt.Println(data)
 	w.Header().Add("Content-Disposition", "attachment; filename=\""+data+"\"")
 	http.ServeFile(w,r,data)
  	time.Sleep(3 * time.Second)

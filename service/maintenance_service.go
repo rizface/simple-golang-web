@@ -16,5 +16,5 @@ type MaintenanceService interface {
 	FormUpdate(ctx context.Context, idMaintenance int) domain.MaintenanceRequest
 	FormUpdateDetail(ctx context.Context, idMaintenance int) domain.DetailMaintenance
 	Export(ctx context.Context) string
-	createExcel([]domain.DetailJoinMaintenance) string
+	createCSV([]domain.DetailJoinMaintenance) string
 }

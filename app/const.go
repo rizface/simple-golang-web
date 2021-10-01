@@ -20,4 +20,7 @@ const (
 	UPDATE_TROUBLESHOOTING = "/troubleshooting/update/{idTrouble}"
 	EXPORT_TROUBLESHOOTING = "/troubleshooting/export"
 
+	// SMS Service
+	ACCOUD_SID = "ACe52d1877980d3a04b8a5f496470e2396"
+	AUTH_TOKEN = "9f2c9d0f10e18f1d54a01c2dc89bfba5"
 )

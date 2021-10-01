@@ -65,7 +65,7 @@ func (repo detailRepositoryImpl) Update(ctx context.Context, tx *sql.Tx, idMaint
 }
 
 func (repo detailRepositoryImpl) Export(ctx context.Context, tx *sql.Tx) []domain.DetailJoinMaintenance {
-	sql := "SELECT nama_petugas,lama_pengerjaan, maintenance.motherboard,maintenance.ram_vendor,CONCAT(maintenance.ram_amount, \" GB\") AS jumlah_ram,maintenance.gpu,maintenance.nic,CONCAT(maintenance.arsitektur_os, \" BIT \") AS arsitektur_os,detail_pengerjaan, DATE_FORMAT(maintenance.tgl_masuk,'%w %M %Y') AS tgl_mulai FROM detail_maintenance INNER JOIN maintenance ON maintenance.id = detail_maintenance.id_maintenance \n"
+	sql := "SELECT nama_petugas,lama_pengerjaan, maintenance.motherboard,maintenance.ram_vendor,CONCAT(maintenance.ram_amount, \" GB\") AS jumlah_ram,maintenance.gpu,maintenance.nic,maintenance.os, CONCAT(maintenance.arsitektur_os, \" BIT \") AS arsitektur_os,detail_pengerjaan, DATE_FORMAT(maintenance.tgl_masuk,'%w %M %Y') AS tgl_mulai FROM detail_maintenance INNER JOIN maintenance ON maintenance.id = detail_maintenance.id_maintenance \n"
 	rows,err := tx.QueryContext(ctx,sql)
 	helper.PanicIfError(err)
 	defer rows.Close()
@@ -74,7 +74,7 @@ func (repo detailRepositoryImpl) Export(ctx context.Context, tx *sql.Tx) []domai
 		each := domain.DetailJoinMaintenance{}
 		err := rows.Scan(&each.Detail.NamaPetugas,&each.Detail.LamaPengerjaan,
 			&each.Spek.Motherboard,&each.Spek.VendorRam,&each.Spek.JumlahRam,&each.Spek.GraphicCard,
-			&each.Spek.NIC,&each.Spek.ArchOS,&each.Detail.DetailPengerjaan,&each.Spek.TglMasuk)
+			&each.Spek.NIC, &each.Spek.SistemOperasi, &each.Spek.ArchOS,&each.Detail.DetailPengerjaan,&each.Spek.TglMasuk)
 		helper.PanicIfError(err)
 		data = append(data,each)
 	}
