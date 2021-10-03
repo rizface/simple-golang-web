@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"pbl-orkom/helper"
 	"pbl-orkom/model/web"
@@ -17,9 +16,6 @@ func NewLoginController(service service.LoginService) LoginController {
 }
 
 func (l loginControllerImpl) LoginPage(w http.ResponseWriter, r *http.Request) {
-	session,err :=  helper.Store.Get(r,"admin")
-	helper.PanicIfError(err)
-	fmt.Println(session)
 	helper.ViewParser(w,"login-page",nil)
 }
 
