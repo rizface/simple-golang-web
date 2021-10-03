@@ -1,7 +1,6 @@
 package app
 
 const (
-	REFERER = ""
 	DATABASE_DRIVER      = "mysql"
 	APP_HOST             = "localhost:3000"
 	GET_MAINTENANCE      = "/maintenance"
