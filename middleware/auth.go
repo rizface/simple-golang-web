@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 	"pbl-orkom/helper"
 )
@@ -12,7 +11,6 @@ func Auth(next http.Handler) http.Handler {
 		helper.PanicIfError(err)
 		login := session.Values["login"]
 		if login != nil && login.(bool) == true {
-			fmt.Println("bisa")
 			next.ServeHTTP(writer,request)
 			return
 		}
