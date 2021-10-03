@@ -8,7 +8,10 @@ import (
 )
 
 func main() {
-	mux,guest,auth := setup.MuxSetup()
+	mux := setup.MuxSetup()
+	guest := setup.GuestSetup(mux)
+	auth:= setup.AuthSetup(mux)
+
 	maintenanceController := setup.MaintenanceControllerSetup()
 	loginController := setup.LoginControllerSetup()
 	troubleController := setup.TroubleControllerSetup()
@@ -37,6 +40,9 @@ func main() {
 	auth.HandleFunc(app.UPDATE_TROUBLESHOOTING,troubleController.UpdateForm).Methods(http.MethodGet)
 	auth.HandleFunc(app.UPDATE_TROUBLESHOOTING, troubleController.Update).Methods(http.MethodPost)
 	auth.HandleFunc(app.EXPORT_TROUBLESHOOTING, troubleController.Export)
+
+	// logout
+	auth.HandleFunc(app.LOGOUT, loginController.Logout)
 
 	helper.StaticFile(mux)
 	mux.NotFoundHandler = helper.NotFoundHandler

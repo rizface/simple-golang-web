@@ -13,15 +13,24 @@ import (
 var db = helper.Connection()
 var validate = validator.New()
 
-func MuxSetup() (*mux.Router,*mux.Router,*mux.Router) {
+func MuxSetup() *mux.Router {
 	mux := mux.NewRouter()
 	mux.Use(middleware.CheckError)
-	guest := mux.NewRoute().Subrouter()
-	auth := mux.NewRoute().Subrouter()
-	guest.Use(middleware.Guest)
-	auth.Use(middleware.Auth)
-	return mux,guest,auth
+	return mux
 }
+
+func GuestSetup(mux *mux.Router) *mux.Router {
+	guest := mux.NewRoute().Subrouter()
+	guest.Use(middleware.Guest)
+	return guest
+}
+
+func AuthSetup(mux *mux.Router) *mux.Router {
+	auth := mux.NewRoute().Subrouter()
+	auth.Use(middleware.Auth)
+	return auth
+}
+
 func MaintenanceControllerSetup() controller.MaintenanceController{
 	spekImpl := repository.NewRepoImpl()
 	detailImpl := repository.NewDetailRepositoryImpl()

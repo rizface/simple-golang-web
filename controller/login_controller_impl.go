@@ -32,3 +32,11 @@ func (l loginControllerImpl) Login(w http.ResponseWriter, r *http.Request) {
 	helper.SetSession(w,r,user)
 	http.Redirect(w,r,"/maintenance", http.StatusSeeOther)
 }
+
+func (l loginControllerImpl) Logout(w http.ResponseWriter, r *http.Request) {
+	session,err := helper.Store.Get(r,"admin")
+	helper.PanicIfError(err)
+	session.Options.MaxAge = -1
+	session.Save(r,w)
+	http.Redirect(w,r,"/",http.StatusSeeOther)
+}
