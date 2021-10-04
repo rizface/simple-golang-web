@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  mysql:
+    container_name: mysql-orkom-compose
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - pbl-orkom-network-compose
+  pbl-orkom:
+    container_name: pbl-orkom-compose
+    image: pbl-orkom-compose:1.0
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    environment:
+      - MYSQL_HOST=mysql-orkom-compose
+    networks:
+      - pbl-orkom-network-compose
+networks:
+  pbl-orkom-network-compose:
+    name: pbl-orkom-network-compose
