@@ -20,7 +20,7 @@ func (l loginControllerImpl) LoginPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (l loginControllerImpl) Login(w http.ResponseWriter, r *http.Request) {
-	data := web.LoginRequest{
+	data := web.UserRequest{
 		Username: r.PostFormValue("username"),
 		Password: r.PostFormValue("password"),
 	}
