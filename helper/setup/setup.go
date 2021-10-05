@@ -53,3 +53,10 @@ func TroubleControllerSetup() controller.TroubleshootingController {
 	troubleController := controller.NewTroubleshootingImpl(troubleService)
 	return troubleController
 }
+
+func AdminControllerSetup() controller.AdminController {
+	adminRepo := repository.NewUserRepository()
+	adminService := service.NewAdminService(db,validate,adminRepo)
+	adminController := controller.NewAdminController(adminService)
+	return adminController
+}

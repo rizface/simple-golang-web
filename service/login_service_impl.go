@@ -20,7 +20,7 @@ func NewLoginService(db *sql.DB, validate *validator.Validate, repo repository.U
 	return loginServiceImpl{db:db, validate:validate, repo:repo}
 }
 
-func (l loginServiceImpl) Login(ctx context.Context, request web.LoginRequest) domain.User {
+func (l loginServiceImpl) Login(ctx context.Context, request web.UserRequest) domain.User {
 	tx,err := l.db.Begin()
 	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(tx)

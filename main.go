@@ -15,10 +15,18 @@ func main() {
 	maintenanceController := setup.MaintenanceControllerSetup()
 	loginController := setup.LoginControllerSetup()
 	troubleController := setup.TroubleControllerSetup()
-
+	adminController := setup.AdminControllerSetup()
 
 	guest.HandleFunc("/", loginController.LoginPage).Methods(http.MethodGet)
 	guest.HandleFunc("/", loginController.Login).Methods(http.MethodPost)
+
+	// Admin
+	auth.HandleFunc(app.GET_ADMIN,adminController.Get).Methods(http.MethodGet)
+	auth.HandleFunc(app.SAVE_ADMIN,adminController.SaveForm).Methods(http.MethodGet)
+	auth.HandleFunc(app.SAVE_ADMIN,adminController.Save).Methods(http.MethodPost)
+	auth.HandleFunc(app.DELETE_ADMIN, adminController.Delete).Methods(http.MethodGet)
+	auth.HandleFunc(app.UPDATE_ADMIN,adminController.UpdateForm).Methods(http.MethodGet)
+	auth.HandleFunc(app.UPDATE_ADMIN,adminController.Update).Methods(http.MethodPost)
 
 	//Maintenance
 	auth.HandleFunc(app.GET_MAINTENANCE, maintenanceController.GetAll).Methods(http.MethodGet)

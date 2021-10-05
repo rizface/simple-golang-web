@@ -1,0 +1,36 @@
+{{define "admin"}}
+    {{template "top-wrapper"}}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3 class="card-title text-white">Data Admin</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" style="text-transform: capitalize">
+                            <thead>
+                            <tr>
+                                <th>username</th>
+                                <th>aksi</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {{range $v := .data}}
+                                    <tr>
+                                        <td>{{$v.Username}}</td>
+                                        <td>
+                                            <a onclick="return confirm('Yakin Akan Menghapus Data Ini ?')" href="/admin/delete/{{$v.Id}}" class="btn btn-danger btn-sm">Delete</a>
+                                            <a href="/admin/update/{{$v.Id}}" class="text-white btn btn-warning btn-sm">Update</a>
+                                        </td>
+                                    </tr>
+                                {{end}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{template "bottom-wrapper"}}
+{{end}}

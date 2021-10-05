@@ -1,6 +1,6 @@
 package web
 
-type LoginRequest struct {
-	Username string
-	Password string
+type UserRequest struct {
+	Username string `validate:"required"`
+	Password string `validate:"required"`
 }

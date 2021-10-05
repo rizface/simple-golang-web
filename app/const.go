@@ -3,6 +3,14 @@ package app
 const (
 	DATABASE_DRIVER      = "mysql"
 	APP_HOST             = "localhost:3000"
+
+	//Admin
+	GET_ADMIN = "/admin"
+	SAVE_ADMIN = "/admin/save"
+	UPDATE_ADMIN = "/admin/update/{idAdmin}"
+	DELETE_ADMIN = "/admin/delete/{idAdmin}"
+
+	//Maintenance
 	GET_MAINTENANCE      = "/maintenance"
 	GET_MAINTENANCE_FORM = "/maintenance-form"
 	SAVE_MAINTENANCE     = "/maintenance/save"

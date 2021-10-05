@@ -1,0 +1,36 @@
+{{define "admin-form-update"}}
+    {{template "top-wrapper"}}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <div class="card-title text-white">Admin</div>
+                </div>
+                <div class="card-body">
+                    <form action="/admin/update/{{.data.Id}}" method="post">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="" class="form-label">Username</label>
+                                    <input value="{{.data.Username}}" type="text" name="username"  class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" name="password" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{template "bottom-wrapper"}}
+{{end}}

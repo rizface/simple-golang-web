@@ -7,5 +7,5 @@ import (
 )
 
 type LoginService interface{
-	Login(ctx context.Context, request web.LoginRequest) domain.User
+	Login(ctx context.Context, request web.UserRequest) domain.User
 }
