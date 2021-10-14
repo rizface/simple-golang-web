@@ -14,10 +14,18 @@ type adminServiceImpl struct {
 	db *sql.DB
 	validate *validator.Validate
 	repo repository.UserRepository
+	maintenance repository.DetailRepository
+	troubleshoot repository.TroubleshootingRepository
 }
 
-func NewAdminService(db *sql.DB, validate *validator.Validate, repo repository.UserRepository) AdminService {
-	return adminServiceImpl{db:db,validate: validate,repo: repo}
+func NewAdminService(db *sql.DB, validate *validator.Validate, repo repository.UserRepository, maintenance repository.DetailRepository, troubleshoot repository.TroubleshootingRepository) AdminService {
+	return adminServiceImpl{
+		db:           db,
+		validate:     validate,
+		repo:         repo,
+		maintenance:  maintenance,
+		troubleshoot: troubleshoot,
+	}
 }
 
 func (a adminServiceImpl) Get(ctx context.Context) []domain.User {
@@ -26,6 +34,17 @@ func (a adminServiceImpl) Get(ctx context.Context) []domain.User {
 	defer helper.CommitOrRollback(tx)
 	data := a.repo.Get(ctx,tx)
 	return data
+}
+
+func (a adminServiceImpl) GetDashboardData(ctx context.Context) domain.DashboardData {
+	tx,err := a.db.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(tx)
+	return domain.DashboardData{
+		Maintenance:     len(a.maintenance.Get(ctx,tx)),
+		Troubleshooting: len(a.troubleshoot.Get(ctx,tx)),
+		Admin:           len(a.repo.Get(ctx,tx)),
+	}
 }
 
 func (a adminServiceImpl) Save(ctx context.Context, request web.UserRequest) bool {

@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 	"pbl-orkom/app"
@@ -17,6 +19,19 @@ type adminControllerImpl struct {
 
 func NewAdminController(service service.AdminService) AdminController {
 	return adminControllerImpl{service: service}
+}
+
+func (a adminControllerImpl) Dashboard(w http.ResponseWriter, r *http.Request) {
+	helper.ViewParser(w,"dashboard", nil)
+}
+
+func (a adminControllerImpl) SseDashboard(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Connection", "keep-alive")
+	w.Header().Set("Cache-Control", "no-cache")
+	data := a.service.GetDashboardData(r.Context())
+	dataJson,_ := json.Marshal(data)
+	fmt.Fprintf(w,"data: %v\n\n", string(dataJson))
 }
 
 func (a adminControllerImpl) Get(w http.ResponseWriter, r *http.Request) {

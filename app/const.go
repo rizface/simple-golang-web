@@ -4,6 +4,9 @@ const (
 	DATABASE_DRIVER      = "mysql"
 	APP_HOST             = "localhost:3000"
 
+	//Dashboard
+	DASHBOARD = "/dashboard"
+
 	//Admin
 	GET_ADMIN = "/admin"
 	SAVE_ADMIN = "/admin/save"

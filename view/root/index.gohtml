@@ -24,43 +24,43 @@
       <div class="col-md-6 mb-4 stretch-card transparent">
         <div class="card card-tale">
           <div class="card-body">
-            <p class="mb-4">Preventive Maintenance Running</p>
-            <p class="fs-30 mb-2">4006</p>
-            <p>10.00% (30 days)</p>
+            <p class="mb-4">Preventive Maintenance</p>
+            <p class="fs-30 mb-2" id="c_maintenance">4006</p>
           </div>
         </div>
       </div>
       <div class="col-md-6 mb-4 stretch-card transparent">
         <div class="card card-dark-blue">
           <div class="card-body">
-            <p class="mb-4">Preventice Maintenance Compleate</p>
-            <p class="fs-30 mb-2">61344</p>
-            <p>22.00% (30 days)</p>
+            <p class="mb-4">Troubleshooting</p>
+            <p class="fs-30 mb-2" id="c_trouble">61344</p>
           </div>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
+      <div class="col-md-12 mb-4 mb-lg-0 stretch-card transparent">
         <div class="card card-light-blue">
           <div class="card-body">
-            <p class="mb-4">TroubleShooting Running</p>
-            <p class="fs-30 mb-2">34040</p>
-            <p>2.00% (30 days)</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 stretch-card transparent">
-        <div class="card card-light-danger">
-          <div class="card-body">
-            <p class="mb-4">TroubleShooting Compleate</p>
-            <p class="fs-30 mb-2">47033</p>
-            <p>0.22% (30 days)</p>
+            <p class="mb-4">Jumlah Admin</p>
+            <p class="fs-30 mb-2" id="c_admin">34040</p>
+            <p style="visibility: hidden">2.00% (30 days)</p>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div> 
+</div>
+
+<script>
+  var source = new EventSource("/sse/dashboard")
+  source.onmessage = function(event) {
+    let data = JSON.parse(event.data)
+    document.getElementById("c_maintenance").innerText = data.maintenance
+    document.getElementById("c_trouble").innerText = data.troubleshooting
+    document.getElementById("c_admin").innerText = data.admin
+  }
+</script>
+
 {{template "bottom-wrapper"}}
 {{end}}

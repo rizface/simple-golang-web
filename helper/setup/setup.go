@@ -56,7 +56,9 @@ func TroubleControllerSetup() controller.TroubleshootingController {
 
 func AdminControllerSetup() controller.AdminController {
 	adminRepo := repository.NewUserRepository()
-	adminService := service.NewAdminService(db,validate,adminRepo)
+	maintenanceRepo := repository.NewDetailRepositoryImpl()
+	troublelshootRepo := repository.NewTroubleshootingRepo()
+	adminService := service.NewAdminService(db,validate,adminRepo,maintenanceRepo,troublelshootRepo)
 	adminController := controller.NewAdminController(adminService)
 	return adminController
 }

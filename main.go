@@ -20,6 +20,10 @@ func main() {
 	guest.HandleFunc("/", loginController.LoginPage).Methods(http.MethodGet)
 	guest.HandleFunc("/", loginController.Login).Methods(http.MethodPost)
 
+	// Dashboard
+	auth.HandleFunc(app.DASHBOARD, adminController.Dashboard)
+	auth.HandleFunc("/sse/dashboard", adminController.SseDashboard)
+
 	// Admin
 	auth.HandleFunc(app.GET_ADMIN,adminController.Get).Methods(http.MethodGet)
 	auth.HandleFunc(app.SAVE_ADMIN,adminController.SaveForm).Methods(http.MethodGet)
