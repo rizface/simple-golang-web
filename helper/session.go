@@ -13,6 +13,6 @@ func SetSession(w http.ResponseWriter, r *http.Request, user domain.User) {
 	PanicIfError(err)
 	session.Values["username"] = user.Username
 	session.Values["login"] = true
-	session.Options.MaxAge = 60 * 10
+	session.Options.MaxAge = 60 * 60
 	session.Save(r,w)
 }

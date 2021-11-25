@@ -17,8 +17,8 @@ func NewDetailRepositoryImpl() DetailRepository {
 
 func (repo detailRepositoryImpl) Get(ctx context.Context, tx *sql.Tx) []domain.DetailJoinMaintenance {
 	data := []domain.DetailJoinMaintenance{}
-	sql := `SELECT id_maintenance ,nama_petugas,lama_pengerjaan, DATE_FORMAT(tgl_masuk,'%w %M %Y') FROM detail_maintenance
-	INNER JOIN maintenance ON maintenance.id = detail_maintenance.id_maintenance`
+	sql := `SELECT id_maintenance ,nama_petugas,lama_pengerjaan, DATE_FORMAT(tgl_masuk,'%d %M %Y') FROM detail_maintenance
+	INNER JOIN maintenance ON maintenance.id = detail_maintenance.id_maintenance ORDER BY detail_maintenance.id DESC`
 	rows,err := tx.QueryContext(ctx,sql)
 	helper.PanicIfError(err)
 	defer rows.Close()

@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"encoding/csv"
-	"fmt"
 	"github.com/go-playground/validator/v10"
 	"os"
 	"pbl-orkom/helper"
@@ -130,7 +129,6 @@ func (t troubleshootingServiceImpl) createCSV(data []domain.Export) string{
 		}
 		csvData = append(csvData,each)
 	}
-	fmt.Println(csvData)
 	csvFile,err := os.Create("troubleshooting.csv")
 	helper.PanicIfError(err)
 	csvWriter := csv.NewWriter(csvFile)

@@ -17,7 +17,7 @@ func NewTroubleshootingRepo() TroubleshootingRepository {
 }
 
 func (t troubleshootingRepositoryImpl) Get(ctx context.Context, tx *sql.Tx) []domain.Troubleshooting {
-	sql := "SELECT id,nama_customer,biaya,DATE_FORMAT(created_at,'%w %M %Y') FROM troubleshooting ORDER BY id DESC"
+	sql := "SELECT id,nama_customer,biaya,DATE_FORMAT(created_at,'%d %M %Y') FROM troubleshooting ORDER BY id DESC"
 	data := []domain.Troubleshooting{}
 	rows,err := tx.QueryContext(ctx,sql);
 	helper.PanicIfError(err)
